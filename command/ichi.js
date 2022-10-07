@@ -222,6 +222,8 @@ case 'menu': case 'help': case '?': {
 ╠ ${prefix}wallpaper
 ╠ ${prefix}quotesanime
 ╠ ${prefix}wikimedia
+╠ ${prefix}iqra
+╠ ${prefix}alquran
 ╚════════
 
 ╔════════
@@ -245,7 +247,7 @@ case 'menu': case 'help': case '?': {
   `
   let but = [
   {urlButton: {displayText: 'Source Code ♨️',url: 'https://github.com/NzrlAfndi/Ichigo-Kurosaki'}}, 
-  {urlButton: {displayText: 'Website 🔗',url: 'https://linktr.ee/nzrlafndi'}}, 
+  {urlButton: {displayText: 'Website 🔗',url: 'https://ariiardana.my.id'}}, 
   {"quickReplyButton": {"displayText": "Donasi 🗂️","id": `donasi`},},
   {"quickReplyButton": {"displayText": "Owner 👦","id": "owner"},},
   {"quickReplyButton": {"displayText": "Status Bot ⌚","id": `ping`}}
@@ -961,6 +963,26 @@ case 'wikimedia': {
   break
 
 //Downloader
+
+case 'iqra': {
+		if (!text) return m.reply(`Example : .iqra IQRA Yang tersedia : 1,2,3,4,5,6`)
+		yy = await getBuffer(`https://islamic-api-indonesia.herokuapp.com/api/data/pdf/iqra${text}`)
+		ichi.sendMessage(m.chat, {document: yy, mimetype: 'application/pdf', fileName: `iqra${text}.pdf`}, {quoted:m}).catch ((err) => m.reply(oh))
+		}
+		break
+		
+case 'alquran': {
+		if (!text) return m.reply(`Contoh penggunaan:\n${prefix + command} 1 2\n\nmaka hasilnya adalah surah Al-Fatihah ayat 2 beserta audionya, dan ayatnya 1 aja`)
+		let res = await fetchJson(`https://islamic-api-indonesia.herokuapp.com/api/data/quran?surah=${args[0]}&ayat=${args[1]}`)
+		let txt = `*Arab* : ${res.result.data.text.arab}
+*English* : ${res.result.data.translation.en}
+*Indonesia* : ${res.result.data.translation.id}
+( Q.S ${res.result.data.surah.name.transliteration.id} : ${res.result.data.number.inSurah} )`
+		m.reply(txt)
+		ichi.sendMessage(m.chat, {audio: { url: res.result.data.audio.primary }, mimetype: 'audio/mpeg'}, { quoted : m })
+		}
+		break
+		
 case 'ytmp4': case 'ytvideo': case 'ytv': {
   let { ytv } = require('../lib/y2mate')
   if (!q) return m.reply(`Gunakan Format : ${command} linknya`)
